@@ -1,5 +1,5 @@
-import mongodb from 'mongodb';
-const ObjectId = mongodb.ObjectId;
+import mongoose from 'mongoose';
+import { ObjectId } from 'mongodb';
 
 let reviews_conn;
 
@@ -9,7 +9,7 @@ export default class ReviewsDAO {
             return;
         }
         try {
-            reviews_conn = await conn.db("movies").collection("reviews");
+            reviews_conn = await conn.collection("reviews");
         } catch (err) {
             console.error(`Unable to establish collection handle in userDAO: ${err.stack}`);
         };
