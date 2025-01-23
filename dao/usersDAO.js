@@ -38,6 +38,16 @@ export default class UsersDAO {
         };
     };
 
+    static async findUser (userId) {
+        try {
+            const user = await userModel.findById(userId);
+            return user ? {userExists:true} : {userExists:false};
+        } catch (e) {
+            console.error(`Error finding user with id: ${userId}, ${e.message}`);
+            throw new Error(`Error finding user with id: ${userId}, ${e.message}`);
+        };
+    };
+
     static async saveNewUser (username, email, password, role) {
         try {
             if(!userModel) {

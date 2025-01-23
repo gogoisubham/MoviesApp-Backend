@@ -82,6 +82,12 @@ export default class UsersCtrl {
     static async deleteUserProfile(req, res, next){
         try {
             const userId = req.params.userId;
+            // Check if the user exists in the database
+            const userExists = await UsersDAO.findUser(userId);
+            if(!userExists){
+                return res.status(404).json({status:'fail', message:"User not found"});
+            };
+            
             if(req.user.userId !== req.params.userId){
                 return res.status(403).json({status:'fail', message:'You are not authorized to delete this profile'});
             };
