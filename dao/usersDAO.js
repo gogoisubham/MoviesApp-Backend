@@ -97,7 +97,7 @@ export default class UsersDAO {
 
     static async getProfile (userId) {
         try {
-            const profile = await userModel.findOne({_id:userId});
+            const profile = await userModel.findOne({_id:userId}, '-email -password');
             if (!profile) {
                 return {success:false, message:"User doesn't exist"};
             };
