@@ -106,5 +106,7 @@ Feel free to fork the repository and submit pull requests. All contributions are
 This project is licensed under the [MIT License](./LICENSE).
 
 ## Author
-**Subham Gogoi**  
-- *[GitHub Profile](https://github.com/gogoisubham)*
+
+- **Subham Gogoi**  
+  - GitHub: [gogoisubham](https://github.com/gogoisubham)  
+  - LinkedIn: [Subham Gogoi](https://www.linkedin.com/in/subham-gogoi-654aa4212/)
