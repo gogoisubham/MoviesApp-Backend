@@ -13,11 +13,11 @@ const uri = `mongodb+srv://${mongo_username}:${mongo_password}@cluster0.ycbsz.mo
 
 mongoose.connect(uri)
         .then(async () => {
-            console.log("Connected to MongoDB successfully using Mongoose!");
+            console.log("Connected to MongoDB successfully using Mongoose.");
             await ReviewsDAO.injectDB(mongoose.connection.useDb("movies"));
             try{
                 await UsersDAO.initializeDB();
-                console.log("Succesfully created UserModel and binded to 'movies'!");
+                // console.log("Succesfully created UserModel and binded to 'movies'!");
             } catch (err) {
                 console.error(`Failed to create UserModel: ${err}`);
                 process.exit(1);
