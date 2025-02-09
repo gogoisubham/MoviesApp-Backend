@@ -5,8 +5,7 @@ import usersRouter from "./api/users.route.js";
 
 const app = express();
 
-//set up middleware 
-app.use(express.json());  // parsing json request bodies
+app.use(express.json());  
 app.use(cors());          
 
 app.use('/movies-backend/v1/reviews', reviewsRouter);

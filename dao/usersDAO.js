@@ -1,30 +1,15 @@
-import mongoose from "mongoose";
-import userSchema from "../models/User.js";
+import UserModel from "../models/User.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-let userModel;
-
 export default class UsersDAO {
-    static async initializeDB() {
-        if (!userModel) {
-            try {
-                userModel = mongoose.connection.useDb("movies").model('User', userSchema);
-            } catch (err) {
-                console.error(`Unable to create user model: ${err}`);
-                throw new Error(`UserModel initialization failed`);
-            };
-        };
-    };
-
-    // method to check the validity of the username and email
     static async isUserValid(username, email) {
         try{
-            const existing_username = await userModel.findOne({username});
-            const existing_email = await userModel.findOne({email});
+            const existing_username = await UserModel.findOne({username});
+            const existing_email = await UserModel.findOne({email});
             if (existing_username){
                 return {valid:false, message:`The username '${username}' already exists. Try a different username.`};
             }
@@ -40,8 +25,8 @@ export default class UsersDAO {
 
     static async findUser (userId) {
         try {
-            const user = await userModel.findById(userId);
-            return user ? {userExists:true} : {userExists:false};
+            const userExists = await UserModel.exists({_id:userId});
+            return userExists ? true : false;
         } catch (e) {
             console.error(`Error finding user with id: ${userId}, ${e.message}`);
             throw new Error(`Error finding user with id: ${userId}, ${e.message}`);
@@ -50,10 +35,7 @@ export default class UsersDAO {
 
     static async saveNewUser (username, email, password, role) {
         try {
-            if(!userModel) {
-                throw new Error("UserModel is not initialized. Call initializeDB first.");
-            } 
-            const newUser = new userModel({
+            const newUser = new UserModel({
                 username,
                 email,
                 password,
@@ -70,7 +52,7 @@ export default class UsersDAO {
     static async userLogin (email, password) {
         // check if user exists
         try {
-            const user = await userModel.findOne({email});
+            const user = await UserModel.findOne({email});
             if (!user) {
                 return {success:false, message:`${email} does not exist. Try signing up.`};
             }
@@ -97,7 +79,7 @@ export default class UsersDAO {
 
     static async getProfile (userId) {
         try {
-            const profile = await userModel.findOne({_id:userId}, '-email -password');
+            const profile = await UserModel.findOne({_id:userId}, '-email -password');
             if (!profile) {
                 return {success:false, message:"User doesn't exist"};
             };
@@ -124,7 +106,7 @@ export default class UsersDAO {
                 throw new Error("No fields provided to update!");
             };
 
-            const response =  await userModel.updateOne({_id:userId},{$set:updates});
+            const response =  await UserModel.updateOne({_id:userId},{$set:updates});
             if(response.matchedCount === 0){
                 throw new Error(`User not found!`);
             };
@@ -137,7 +119,7 @@ export default class UsersDAO {
 
     static async deleteUser(userId){
         try {
-            const response = await userModel.deleteOne({_id:userId});
+            const response = await UserModel.deleteOne({_id:userId});
             if(response.deletedCount === 0){
                 throw new Error(`User not found!`);
             };
